@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+	      <meta charset="utf-8">
+	      <meta name="viewport" content="width=device-width, initial-scale=1">
+	      <title>移动GIS平台</title>
+	<link rel="stylesheet"  href="../../lib/jqm/css/jquery.mobile-1.3.0.min.css">
+    <link href="../../css/desktop/demoComm.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/desktop/farbtastic.css" rel="stylesheet" type="text/css" />
+
+    <!--<script type="text/javascript" src="../../lib/config.js"></script>-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>   
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../lib/jqm/js/jquery.mobile-1.3.0.min.js"></script>
+    <script type="text/javascript" src="../../lib/OpenLayers/OpenLayers.debug.js"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry,places&sensor=true">  </script>
+    <script type="text/javascript" src="../../js/mobile/map/mobilemap.js"></script>
+    <script type="text/javascript" src="../../js/mobile/map/mapservice.js"></script>
+    <script type="text/javascript" src="../../js/mobile/moblie_index.js"></script>
+    <script type="text/javascript">
+        //window.onload = loadScript;
+        var MapTool = new humming.Map.mapTool();
+        var SearchServiceTool = new humming.MapService.SearchService();
+        $(document).ready(function () {
+            MapTool.initmap();
+            SearchServiceTool.autocomplete_init();
+            //google.load("search", "1");
+           // google.load("jquery", "1.4.2");
+           // google.load("jqueryui", "1.7.2");
+            // <script type="text/javascript" src="https://www.google.com/jsapi">
+        });
+
+</script>
+	  </head>
+	  <body >
+         <div data-role="page" id="home-page" data-theme="d" >
+               <!--头部区域 -->
+	           <div data-role="header" data-theme="c" data-position="fixed" data-tap-toggle="false" > 
+                    <a href="#popupNested" data-rel="popup" data-role="button" data-inline="true" data-icon="bars" data-theme="c" data-transition="pop">菜单</a>
+                    <h1>空间信息智慧云平台</h1>
+                    <a href="#" data-icon="check">返回</a>
+                    <div id='input'>
+                        <input id='gmaps-input-address' placeholder='Start typing a place name...' type='text' />
+                    </div>
+                </div>
+                <!--左面板菜单 -->
+                     <div data-role="popup" id="popupNested" data-theme="none">
+                        <div data-role="collapsible-set" data-theme="b" data-content-theme="c" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d" style="margin:0; width:250px;">
+                            <div data-role="collapsible" data-inset="false">
+                                <h2>地图服务</h2>
+                                <ul data-role="listview">
+										<li onClick="onshow1()"><a href="#" data-rel="dialog">google地图</a></li>
+										<li onClick="onshow2()"><a href="#" data-rel="dialog">google卫星图</a></li>
+                                        <li onclick="onshow3()"><a href="#" data-rel="dialog">google街景图</a></li>
+                                        <li onclick="ongeocode2pnt()"><a href="#" data-rel="dialog">地址编码测试</a></li>
+                                </ul>
+                            </div><!-- /collapsible -->
+                            <div data-role="collapsible" data-inset="false">
+                                <h2>搜索服务</h2>
+                                <ul data-role="listview">
+                                    <li><a href="search.html" data-rel="dialog" onclick="onplacesearch()">周边搜引擎索测试</a></li>
+                                    <li><a href="search.html" data-rel="dialog" onclick="onperformSearch()">文本搜引擎索测试</a></li>
+                                </ul>
+                            </div><!-- /collapsible -->
+                            <div data-role="collapsible" data-inset="false">
+                                <h2>出行服务</h2>
+                                <ul data-role="listview">
+                                    <li><a href="#" data-rel="dialog" onclick="onSearchPOI()">驾车出行</a></li>
+                                    <li><a href="#" data-rel="dialog" onclick="onsearchnavstart()">出行起点</a></li>
+                                    <li><a href="#" data-rel="dialog" onclick="onsearchnavend()">出行终点</a></li>
+                                </ul>
+                            </div><!-- /collapsible -->
+                            <div data-role="collapsible" data-inset="false">
+                                <h2>帮助</h2>
+                                <ul data-role="listview">
+                                    <li><a href="#" data-rel="dialog">用户手册</a></li>
+                                    <li><a href="#" data-rel="dialog" onclick="getTestFun()">关于</a></li>
+                                </ul>
+                            </div><!-- /collapsible -->
+                        </div><!-- /collapsible set -->
+                    </div><!-- /popup -->
+                <!--右面板菜单 -->
+                <div data-role="panel" id="right-panel" data-display="overlay" data-position="right" data-theme="c">
+                     <ul data-role="listview" data-theme="d" data-icon="false">
+                    <li data-icon="delete">
+                      <a href="#" data-rel="close">隐藏</a>
+                    </li>
+                    <li data-role="list-divider">分享当前页</li>
+                    <li>
+                      <a href="#">新浪微博</a>
+                    </li>
+                    <li>
+                      <a href="#">腾讯QQ</a>
+                    </li>
+                    <li>
+                      <a href="#">短信</a>
+                    </li>
+                    <li>
+                      <a href="#">邮箱</a>
+                    </li>
+                  </ul>
+                </div>
+                <!--操作客户区域 -->
+				<div id="center-panel"> <!-- onresize="autoFrame();"-->
+				
+					<div class="main-content-frame" id="iframe" style="width: 100%; height: 100%; z-index: 1" scrolling="auto">
+						<div id="simpleMap"></div>
+                        <div id="pano" style="position:absolute; left:410px; top: 8px; width: 400px; height: 300px;"></div>
+<!--							<div id="ie5menu" class="skin0" onMouseOver="highlightie5()" onMouseOut="lowlightie5()">
+							<div class="menuitems" id="setnavstartpoint">设为导航起点</div>
+							<div class="menuitems" id="setnavendpoint">设为导航终点</div>
+						</div>-->
+<!--							<script>
+							//如果当前浏览器是Internet Explorer，document.all就返回真
+							if (document.all && window.print) {
+								//选择菜单方块的显示样式
+								ie5menu.className = menuskin;
+								//重定向鼠标右键事件的处理过程为自定义程序showmenuie5
+								document.getElementById("iframe").oncontextmenu = showmenuie5;
+								//重定向鼠标左键事件的处理过程为自定义程序hidemenuie5
+								document.body.onclick = hidemenuie5;  //body
+							}
+						</script>-->
+					</div>				
+				</div>
+                <!--尾部区域 -->
+               <!----<div data-role="footer" data-theme="d" data-position="fixed" data-tap-toggle="false" data-fullscreen="true"> 
+                        <h1>
+                          底部导航
+                        </h1>
+                </div>-->
+               
+          </div>
+      </body>
+</html>
+ 
